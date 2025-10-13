@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.http import HttpResponse
 from django.views import View
 from django.views.generic import TemplateView,ListView
 from EkartApp.models import Category,Product
+from EkartApp.forms import UserRegisterForm,LoginForm
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import login,logout,authenticate
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -18,3 +23,34 @@ class ProductView(View):
         item = Product.objects.get(id=kwargs.get("id"))
         return render(request,"details.html",{"item":item})
     
+class RegisterView(View):
+    def get(self,request):
+        form = UserRegisterForm()
+        return render(request,"reg.html",{"form":form})
+    
+    def post(self,request):
+        form_instance = UserRegisterForm(request.POST)
+        if form_instance.is_valid():
+            User.objects.create_user(**form_instance.cleaned_data)
+            messages.success(request,"User Registered Succesfully")
+            return redirect("login")
+        else:
+            messages.error(request,"Registration Failed !")
+            return redirect("register")
+
+class LoginView(View):
+    def get(self,request):
+        form = LoginForm()
+        return render(request,"login.html",{"form":form})
+    
+    def post(self,request):
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        res = authenticate(request,username=username,password=password)
+        if res:
+            login(request,res)
+            messages.success(request,"Login Succesfull")
+            return redirect("home_view")
+        else:
+            messages.error(request,"Invalid Credentials")
+            return redirect("login")

@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100 ">
+        <h1>User Registration</h1>
+        <div class="w-50">
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="">Full Name</label>
+                {{ form.first_name }}
+                <label for="">username</label>
+                {{ form.username }}
+                <label for="">Password</label>
+                {{ form.password }}
+                <label for="">email</label>
+                {{ form.email }}
+                <input type="submit" class="btn btn-success mt-3">
+        </form>
+        </div>
+    </div>
+    {% endblock %}
