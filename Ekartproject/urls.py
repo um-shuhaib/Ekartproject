@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from EkartApp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",views.HomeView.as_view(),name="home_view"),
-]
+    path("details/<int:id>",views.ProductView.as_view(),name="product_view"),
+
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
