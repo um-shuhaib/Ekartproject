@@ -24,7 +24,7 @@
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><p class=" mt-auto">{{ item.description }}</p></div>
-                                <div class="text-center"><a class="btn btn-outline-primary mt-auto">Add To Cart</a></div>
+                                <div class="text-center"><a href="{% url 'addcart' item.id %}" class="btn btn-outline-primary mt-auto">Add To Cart</a></div>
                             </div>
                         </div>
                     </div>
