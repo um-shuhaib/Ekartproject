@@ -68,8 +68,15 @@ class AddToCartView(View):
         product=Product.objects.get(id=kwargs.get("id"))
         user=request.user
         quantity = request.POST.get("quantity")
-        Cart.objects.create(product=product,user=user,quantity=quantity)
-        return redirect("home_view")
+        cart_instance=Cart.objects.filter(user=user,product=product,status="in-cart")  #[]
+        if cart_instance:
+            cart_instance[0].quantity+=int(quantity)
+            cart_instance[0].save()
+            messages.success(request,"added to cart")
+            return redirect("home_view")
+        else:
+            Cart.objects.create(product=product,user=user,quantity=quantity)
+            return redirect("home_view")
 
     
 
