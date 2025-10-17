@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from EkartApp.models import Cart
+from EkartApp.models import Cart,Order
 
 class UserRegisterForm(forms.ModelForm):
     class Meta:
@@ -28,5 +28,14 @@ class CartForm(forms.ModelForm):
         model=Cart
         fields=["quantity"]
         widgets={
-            forms.NumberInput(attrs={'class':'form-control'})
+           'quantity': forms.NumberInput(attrs={'class':'form-control'})
+        }
+
+class OrderPlacedForm(forms.ModelForm):
+    class Meta:
+        model=Order
+        fields=["address"]
+
+        widgets={
+           'address':forms.Textarea(attrs={'class':'form-control','placeholder':'Enter Your Address Here ...'})
         }

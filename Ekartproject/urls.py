@@ -29,6 +29,7 @@ urlpatterns = [
     path("add/cart/<int:id>",views.AddToCartView.as_view(),name="addcart"),
     path("logout",views.LogoutView.as_view(),name="logout"),
     path("cart",views.CartListView.as_view(),name="cart"),
+    path("order_placed/<int:id>",views.Order_placed_View.as_view(),name="order_placed"),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

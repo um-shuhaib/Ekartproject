@@ -2,13 +2,14 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic import TemplateView,ListView
-from EkartApp.models import Category,Product,Cart
-from EkartApp.forms import UserRegisterForm,LoginForm,CartForm
+from EkartApp.models import Product,Cart,Order
+from EkartApp.forms import UserRegisterForm,LoginForm,CartForm,OrderPlacedForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate
 from django.utils.decorators import method_decorator 
 from EkartApp.authentication import login_required
+from django.core.mail import send_mail,settings
 
 
 # Create your views here.
@@ -82,8 +83,34 @@ class AddToCartView(View):
 class CartListView(View):
     def get(self,request):
         user=request.user
-        cart_list=Cart.objects.filter(user=user)
+        cart_list=Cart.objects.filter(user=user,status="in-cart")
         return render(request,"cart.html",{"cart_list":cart_list})
+
+class Order_placed_View(View):
+    def get(self,request,**kwargs):
+        cart_item=Cart.objects.get(id=kwargs.get("id"))
+        form=OrderPlacedForm()
+        return render(request,"order_placed.html",{"form":form,"cart":cart_item})
+    def post(self,request,**kwargs):
+        user=request.user
+        cart_instance=Cart.objects.get(id=kwargs.get("id"))
+        address=request.POST.get("address")
+        Order.objects.create(user=user,cart=cart_instance,address=address)
+        messages.success(request,"Order Placed succesfully")
+        cart_instance.status="order-placed"
+        cart_instance.save()
+
+        sub="Order Placed"
+        msg="Confirmation for your purchase ! Order placed from your EKartApp"
+        mail_from=settings.EMAIL_HOST_USER
+        email_to=user.email
+        res=send_mail(sub,msg,mail_from,[email_to])
+        if res:
+            messages.success(request,"Email send successful")
+        else:
+            messages.warning(request,"Email send Not successful")
+        return redirect("home_view")
+
 
 
 
