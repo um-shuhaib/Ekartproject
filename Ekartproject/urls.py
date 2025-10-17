@@ -28,6 +28,7 @@ urlpatterns = [
     path("login",views.LoginView.as_view(),name="login"),
     path("add/cart/<int:id>",views.AddToCartView.as_view(),name="addcart"),
     path("logout",views.LogoutView.as_view(),name="logout"),
+    path("cart",views.CartListView.as_view(),name="cart"),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

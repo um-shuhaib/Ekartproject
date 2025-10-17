@@ -79,6 +79,14 @@ class AddToCartView(View):
             return redirect("home_view")
 
     
+class CartListView(View):
+    def get(self,request):
+        user=request.user
+        cart_list=Cart.objects.filter(user=user)
+        return render(request,"cart.html",{"cart_list":cart_list})
+
+
+
 
 class LogoutView(View):
     def get(self,request):
