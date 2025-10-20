@@ -114,8 +114,8 @@ class Order_placed_View(View):
 class Order_list_view(View):
     def get(self,request):
         user=request.user
-        cart_list=Cart.objects.filter(user=user,status="order-placed")
-        return render(request,"orders_list.html",{"cart_list":cart_list})
+        order_list=Order.objects.filter(user=user)
+        return render(request,"orders_list.html",{"order_list":order_list})
 
 
 

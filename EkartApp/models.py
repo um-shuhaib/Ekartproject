@@ -32,6 +32,9 @@ class Cart(models.Model):
     status=models.CharField(max_length=100,default="in-cart",choices=options)
     added_date=models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.product.product_name
+
 class Order(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     cart=models.ForeignKey(Cart,on_delete=models.CASCADE)
@@ -45,3 +48,6 @@ class Order(models.Model):
         ("cancelled","cancelled"),
     )
     status=models.CharField(max_length=100,default="order-placed",choices=options)
+
+    def __str__(self):
+        return self.cart.product.product_name
