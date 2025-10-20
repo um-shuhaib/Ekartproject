@@ -101,10 +101,9 @@ class Order_placed_View(View):
         cart_instance.save()
 
         sub="Order Placed"
-        msg="Confirmation for your purchase ! Order placed from your EKartApp"
         mail_from=settings.EMAIL_HOST_USER
         email_to=user.email
-        res=send_mail(sub,msg,mail_from,[email_to])
+        res=send_mail(sub,f"Your Order Confirmation fot the item {cart_instance.product.product_name} is succesful.",mail_from,[email_to])
         if res:
             messages.success(request,"Email send successful")
         else:
@@ -112,6 +111,11 @@ class Order_placed_View(View):
         return redirect("home_view")
 
 
+class Order_list_view(View):
+    def get(self,request):
+        user=request.user
+        cart_list=Cart.objects.filter(user=user,status="order-placed")
+        return render(request,"orders_list.html",{"cart_list":cart_list})
 
 
 
